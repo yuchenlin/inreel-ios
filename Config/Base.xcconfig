@@ -1,0 +1,19 @@
+// Base.xcconfig — committed. Shared signing / identity defaults for Inreel.
+//
+// Do NOT put a real Apple Developer Team ID here. To build on a device or archive:
+//   cp Config/Signing.xcconfig.example Config/Signing.xcconfig
+// and fill in your own values. Config/Signing.xcconfig is gitignored.
+//
+// Precedence (low → high): this file → optional Config/Signing.xcconfig →
+// xcodebuild command-line overrides (e.g. DEVELOPMENT_TEAM=ABCDE12345).
+
+// Team: empty by default. Simulator builds work without a team.
+// Back-compat: an INREEL_DEVELOPMENT_TEAM environment variable (or xcodebuild
+// INREEL_DEVELOPMENT_TEAM=... argument) is still honoured; Signing.xcconfig wins.
+DEVELOPMENT_TEAM = $(INREEL_DEVELOPMENT_TEAM)
+
+// Bundle identifier. Forks MUST change this (and the app name/icon — see NOTICE).
+INREEL_BUNDLE_ID = app.inreel.ios
+
+// Optional local overrides (missing file is fine thanks to `#include?`).
+#include? "Signing.xcconfig"

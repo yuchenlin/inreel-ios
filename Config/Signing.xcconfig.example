@@ -1,0 +1,13 @@
+// Copy to Config/Signing.xcconfig (gitignored) and fill in your own values.
+//   cp Config/Signing.xcconfig.example Config/Signing.xcconfig
+//
+// Your 10-character Apple Developer Team ID (Xcode → Settings → Accounts, or
+// developer.apple.com → Membership). Leave empty for Simulator-only builds.
+DEVELOPMENT_TEAM =
+
+// A bundle identifier you own. Forks must not ship as app.inreel.ios.
+// The unit-test bundle becomes $(INREEL_BUNDLE_ID).tests automatically.
+INREEL_BUNDLE_ID = com.example.myreel
+
+// Optional, used by scripts/archive-appstore.sh for manual App Store signing:
+// INREEL_PROFILE_NAME = My App Store Profile

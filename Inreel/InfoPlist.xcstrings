@@ -1,0 +1,124 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSPhotoLibraryUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel needs access to all photos and videos so it can randomly revisit your library on device. Photos are never uploaded."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel 需要访问所有照片和视频，才能在本地随机回顾你的相册。照片不会上传。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel 需要存取所有照片和影片，才能在本機隨機回顧你的相簿。照片不會上傳。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreelはライブラリを端末上でランダムに振り返るため、すべての写真とビデオへのアクセスが必要です。写真がアップロードされることはありません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel은 기기에서 라이브러리를 무작위로 다시 보려면 모든 사진과 비디오에 접근해야 합니다. 사진은 업로드되지 않습니다."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel necesita acceso a todas las fotos y vídeos para volver a visitar tu biblioteca al azar en el dispositivo. Las fotos nunca se suben."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel a besoin d’accéder à toutes vos photos et vidéos pour revisiter votre photothèque au hasard sur cet appareil. Aucune photo n’est envoyée."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel benötigt Zugriff auf alle Fotos und Videos, um deine Mediathek lokal zufällig erneut zu zeigen. Fotos werden nie hochgeladen."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Inreel precisa de acesso a todas as fotos e vídeos para revisitar sua biblioteca aleatoriamente neste dispositivo. As fotos nunca são enviadas."
+          }
+        }
+      }
+    },
+    "CFBundleDisplayName": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inreel"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -1,0 +1,81 @@
+name: Inreel
+options:
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "27.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+  developmentLanguage: en
+  knownRegions:
+    - en
+    - Base
+    - zh-Hans
+    - zh-Hant
+    - ja
+    - ko
+    - es
+    - fr
+    - de
+    - pt-BR
+settings:
+  IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+  TARGETED_DEVICE_FAMILY: "1"
+  SWIFT_VERSION: "5.0"
+  SWIFT_STRICT_CONCURRENCY: complete
+  SDKROOT: iphoneos
+  CODE_SIGN_STYLE: Automatic
+  # DEVELOPMENT_TEAM and INREEL_BUNDLE_ID come from Config/Base.xcconfig
+  # (+ optional gitignored Config/Signing.xcconfig). Never commit a real team id.
+  CODE_SIGNING_ALLOWED: "YES"
+  CODE_SIGN_IDENTITY: "Apple Development"
+  GENERATE_INFOPLIST_FILE: YES
+  INFOPLIST_KEY_CFBundleDisplayName: Inreel
+  INFOPLIST_KEY_NSPhotoLibraryUsageDescription: Inreel needs access to all photos and videos so it can randomly revisit your library on device. Photos are never uploaded.
+  INFOPLIST_KEY_UILaunchScreen_Generation: NO
+  INFOPLIST_KEY_LSRequiresIPhoneOS: YES
+  INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+  INFOPLIST_KEY_UIRequiresFullScreen: YES
+  MARKETING_VERSION: "1.0"
+  CURRENT_PROJECT_VERSION: 55
+targets:
+  Inreel:
+    type: application
+    platform: iOS
+    supportedDestinations: [iOS, iOSSimulator]
+    sources:
+      - path: Inreel
+      - path: Inreel/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    configFiles:
+      Debug: Config/Base.xcconfig
+      Release: Config/Base.xcconfig
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "$(INREEL_BUNDLE_ID)"
+      INFOPLIST_FILE: Inreel/Info.plist
+      PRODUCT_NAME: Inreel
+      ENABLE_TESTABILITY: YES
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+      SUPPORTS_MACCATALYST: NO
+      SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    scheme:
+      gatherCoverageData: false
+      testTargets:
+        - InreelTests
+
+  InreelTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: InreelTests
+    dependencies:
+      - target: Inreel
+    configFiles:
+      Debug: Config/Base.xcconfig
+      Release: Config/Base.xcconfig
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "$(INREEL_BUNDLE_ID).tests"
+      GENERATE_INFOPLIST_FILE: YES
+      TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Inreel.app/Inreel"
+      BUNDLE_LOADER: "$(TEST_HOST)"
+      ENABLE_TESTABILITY: YES
