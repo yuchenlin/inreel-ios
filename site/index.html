@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inreel — Like a private Instagram, just for you</title>
+<meta name="description" content="Inreel turns your own Photos library into a full-screen feed. Free forever, no ads, no AI, and your data never leaves your phone.">
+<meta name="theme-color" content="#1B2140">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="icon" type="image/png" sizes="1024x1024" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<style>
+:root{
+  --navy:#1B2140; --navy-2:#151a33; --navy-3:#232a4f; --line:#2e3660;
+  --cream:#F3EAD6; --cream-2:#e6dabf; --muted:#b9b3a3; --ink:#1B2140;
+  --radius:18px; --max:1080px;
+  --font: system-ui,-apple-system,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","PingFang TC","Hiragino Sans","Hiragino Kaku Gothic ProN","Apple SD Gothic Neo","Noto Sans CJK SC","Noto Sans CJK JP","Noto Sans CJK KR","Microsoft YaHei","Malgun Gothic",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--navy);color:var(--cream);font-family:var(--font);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:var(--cream)}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:8px;background:var(--cream);color:var(--ink);padding:8px 12px;border-radius:8px;z-index:20}
+.skip:focus{left:8px}
+:focus-visible{outline:3px solid var(--cream);outline-offset:3px;border-radius:6px}
+[data-i18n]{white-space:pre-line}
+
+/* ---------- film strip motif (flat, hard-stop pattern = sprocket holes) ---------- */
+.strip{height:30px;background:var(--cream);position:relative}
+.strip::before,.strip::after{content:"";position:absolute;left:0;right:0;height:7px;
+  background:repeating-linear-gradient(90deg,var(--navy) 0 11px,transparent 11px 22px)}
+.strip::before{top:5px}.strip::after{bottom:5px}
+.strip.thin{height:18px}
+.strip.thin::before,.strip.thin::after{height:4px;background:repeating-linear-gradient(90deg,var(--navy) 0 7px,transparent 7px 14px)}
+.strip.thin::before{top:3px}.strip.thin::after{bottom:3px}
+
+/* ---------- header ---------- */
+header.top{position:sticky;top:0;z-index:10;background:var(--navy);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:18px;letter-spacing:.2px}
+.brand img{width:32px;height:32px;border-radius:8px}
+.lang{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 4px 4px 10px;background:var(--navy-2)}
+.lang svg{width:16px;height:16px;flex:none}
+.lang select{appearance:none;-webkit-appearance:none;background:transparent;color:var(--cream);border:0;font:inherit;font-size:14px;padding:4px 22px 4px 2px;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--cream) 50%),linear-gradient(135deg,var(--cream) 50%,transparent 50%);
+  background-position:right 9px center,right 4px center;background-size:5px 5px;background-repeat:no-repeat}
+.lang select option{background:var(--navy);color:var(--cream)}
+
+/* ---------- hero ---------- */
+.hero{padding:40px 0 56px}
+.hero .wrap{display:grid;gap:40px;align-items:center}
+.app-id{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.app-id img{width:72px;height:72px;border-radius:17px;border:2px solid var(--cream)}
+.app-id b{display:block;font-size:20px}
+.app-id span{color:var(--muted);font-size:14px}
+.eyebrow{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--cream);padding:4px 10px;border-radius:6px;margin:0 0 14px}
+h1{font-size:clamp(34px,8.5vw,60px);line-height:1.08;margin:0 0 18px;letter-spacing:-.02em;font-weight:800}
+.lead{font-size:clamp(17px,2.4vw,19px);color:var(--cream-2);margin:0 0 26px;max-width:36em}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px}
+.badge{display:inline-flex;flex-direction:column;justify-content:center;min-width:170px;height:56px;padding:0 20px;border-radius:12px;background:var(--cream);color:var(--ink);text-decoration:none;line-height:1.1;border:2px solid var(--cream)}
+.badge small{font-size:12px;font-weight:500}
+.badge strong{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.badge:hover{background:var(--navy);color:var(--cream)}
+.note{font-size:14px;color:var(--muted)}
+
+/* ---------- phone frame / screenshot slot ---------- */
+.phone{position:relative;width:100%;max-width:280px;margin:0 auto;aspect-ratio:9/19.5;border:10px solid var(--cream);border-radius:40px;background:var(--cream);overflow:hidden}
+.phone::after{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:32%;height:18px;border-radius:999px;background:var(--navy);z-index:3}
+.screen{position:absolute;inset:0;border-radius:30px;overflow:hidden;background:var(--navy-2)}
+.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:28px 26px;color:var(--cream)}
+.ph::before,.ph::after{content:"";position:absolute;top:0;bottom:0;width:7px;background:repeating-linear-gradient(180deg,var(--cream) 0 10px,transparent 10px 22px);opacity:.55}
+.ph::before{left:8px}.ph::after{right:8px}
+.ph .n{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.04em;color:var(--ink);background:var(--cream);padding:5px 8px;border-radius:5px}
+.ph .t{font-size:14px;line-height:1.4;color:var(--cream-2)}
+.ph .s{font-size:12px;color:var(--muted)}
+.hero .phone{max-width:300px}
+
+/* ---------- sections ---------- */
+section{padding:64px 0}
+.alt{background:var(--navy-2)}
+h2{font-size:clamp(28px,5.6vw,42px);line-height:1.15;margin:0 0 14px;letter-spacing:-.015em;font-weight:800}
+.sub{color:var(--cream-2);font-size:17px;max-width:40em;margin:0 0 30px}
+.kicker{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.12em;color:var(--muted);margin:0 0 12px;text-transform:uppercase}
+
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:0;position:relative;z-index:2}
+.chip{background:var(--cream);color:var(--ink);border-radius:var(--radius);padding:16px 16px 18px}
+.chip svg{width:26px;height:26px;margin-bottom:8px}
+.chip b{display:block;font-size:17px;line-height:1.25;margin-bottom:4px}
+.chip span{font-size:14px;line-height:1.45;color:#3d4363}
+
+.steps{display:grid;gap:14px;counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{position:relative;background:var(--navy-3);border:1px solid var(--line);border-radius:var(--radius);padding:20px 20px 20px 84px;min-height:96px}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:18px;top:20px;width:48px;height:56px;border-radius:6px;background:var(--cream);color:var(--ink);font-weight:800;font-size:26px;display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 6px 0 -2px var(--cream),inset 0 -6px 0 -2px var(--cream)}
+.steps li::after{content:"";position:absolute;left:22px;top:23px;width:40px;height:4px;background:repeating-linear-gradient(90deg,var(--navy) 0 6px,transparent 6px 11px);box-shadow:0 46px 0 var(--navy)}
+.steps b{display:block;font-size:18px;margin-bottom:4px}
+.steps span{color:var(--cream-2);font-size:15px}
+
+.feature{display:grid;gap:36px;align-items:start}
+.bullets{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.bullets li{position:relative;padding:12px 14px 12px 46px;background:var(--navy-3);border:1px solid var(--line);border-radius:14px;font-size:15.5px}
+.bullets li::before{content:"";position:absolute;left:14px;top:15px;width:18px;height:18px;border-radius:4px;background:var(--cream);
+  box-shadow:inset 0 0 0 5px var(--cream),inset 0 0 0 9px var(--navy)}
+.alt .bullets li{background:var(--navy)}
+
+.reel{margin:0 -20px}
+.reel .row{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:22px 20px;background:var(--navy-2);-webkit-overflow-scrolling:touch}
+.alt .reel .row{background:var(--navy)}
+.reel .phone{flex:0 0 66%;max-width:240px;scroll-snap-align:center;margin:0}
+
+.privacy-card{background:var(--cream);color:var(--ink);border-radius:24px;padding:26px 22px;display:grid;gap:28px;align-items:center}
+.privacy-card h2{color:var(--ink)}
+.privacy-card .sub{color:#3d4363}
+.privacy-card .bullets li{background:#fff8e9;border-color:#e2d6bb;color:var(--ink)}
+.privacy-card .bullets li::before{background:var(--navy);box-shadow:inset 0 0 0 5px var(--navy),inset 0 0 0 9px var(--cream)}
+.privacy-card .fine{font-size:14px;color:#4a5070;margin:16px 0 18px}
+.btn{display:inline-block;padding:12px 18px;border-radius:12px;background:var(--navy);color:var(--cream);text-decoration:none;font-weight:600;border:2px solid var(--navy)}
+.btn:hover{background:transparent;color:var(--navy)}
+.privacy-card .phone{border-color:var(--navy);background:var(--navy);max-width:240px}
+.privacy-card .phone::after{background:var(--cream)}
+
+.faq details{border-top:1px solid var(--line);padding:4px 0}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:16px 40px 16px 0;font-weight:700;font-size:17px;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:12px;width:26px;height:26px;border-radius:6px;background:var(--cream);color:var(--ink);font-weight:800;text-align:center;line-height:26px}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin:0 0 18px;color:var(--cream-2);max-width:46em}
+
+footer{padding:40px 0 48px;font-size:14px;color:var(--muted)}
+footer .links{display:flex;flex-wrap:wrap;gap:10px 22px;margin:18px 0}
+footer .links a{color:var(--cream);text-decoration:none;border-bottom:1px solid var(--line)}
+footer .links a:hover{border-color:var(--cream)}
+footer .tm{font-size:12.5px;max-width:52em;margin:14px 0 0}
+footer .brand{margin-bottom:6px}
+
+/* ---------- CTA: TestFlight + App Store placeholder ---------- */
+.badge.soon{background:transparent;color:var(--cream);border:2px dashed var(--line);cursor:default}
+.badge.soon:hover{background:transparent;color:var(--cream)}
+.badge.soon em{font-style:normal;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.cta .note{flex-basis:100%}
+
+/* ---------- examples ---------- */
+.ex-list{list-style:none;padding:0;margin:0;display:grid;gap:16px}
+.ex{display:grid;grid-template-columns:112px 1fr;gap:18px;align-items:center;background:var(--navy);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.ex .phone{max-width:112px;border-width:5px;border-radius:22px;margin:0}
+.ex .phone .screen{border-radius:17px}
+.ex .phone::after{top:4px;height:8px}
+.ex .num{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.1em;color:var(--muted);margin:0 0 8px}
+.ex h3{font-size:18px;line-height:1.3;margin:0 0 6px}
+.ex p{margin:0;color:var(--cream-2);font-size:15px}
+.ex .tag{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;color:var(--ink);background:var(--cream);padding:3px 8px;border-radius:999px}
+
+/* ---------- open source ---------- */
+.os-card{background:var(--navy-3);border:1px solid var(--line);border-radius:24px;padding:26px 22px;display:grid;gap:26px;align-items:center}
+.os-card .btn{background:var(--cream);color:var(--ink);border-color:var(--cream);display:inline-flex;align-items:center;gap:8px}
+.os-card .btn:hover{background:transparent;color:var(--cream)}
+.os-card .btn svg{width:20px;height:20px}
+.os-card>div{min-width:0}
+.term{background:var(--navy);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font:12.5px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--cream-2);overflow-x:auto;white-space:pre}
+.term b{color:var(--cream)}
+.lic{display:inline-block;font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border:1px solid var(--cream);border-radius:6px;padding:5px 8px;margin-bottom:14px}
+
+@media (min-width:760px){
+  .ex-list{grid-template-columns:1fr 1fr;gap:18px}
+  .ex{grid-template-columns:150px 1fr;padding:20px;gap:22px}
+  .ex .phone{max-width:150px}
+  .ex:last-child:nth-child(odd){grid-column:1/-1;max-width:calc(50% - 9px);justify-self:center;width:100%}
+  .os-card{grid-template-columns:1.2fr 1fr;padding:40px}
+  .hero{padding:72px 0 88px}
+  .hero .wrap{grid-template-columns:1.25fr 1fr}
+  .chips{grid-template-columns:repeat(4,1fr);gap:16px}
+  .steps{grid-template-columns:repeat(3,1fr)}
+  .steps li{padding:88px 20px 22px 20px}
+  .steps li::before{top:20px}
+  .feature{grid-template-columns:1fr}
+  .reel{margin:0}
+  .reel .row{justify-content:center;overflow:visible;border-radius:20px;padding:28px}
+  .reel .phone{flex:1 1 0;max-width:250px}
+  .privacy-card{grid-template-columns:1.4fr 1fr;padding:40px}
+  section{padding:88px 0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+<noscript><style>.lang{display:none}</style></noscript>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="ui.skip">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/favicon-64.png" alt="" width="32" height="32">Inreel</a>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="sr" data-i18n="ui.language">Language</span>
+      <select id="lang-select" aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh-Hans">简体中文</option>
+        <option value="zh-Hant">繁體中文</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="pt-BR">Português (Brasil)</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main id="main">
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="app-id">
+        <img src="assets/icon-256.png" alt="Inreel app icon" data-i18n-alt="ui.iconAlt" width="72" height="72">
+        <div><b>Inreel</b><span>iOS 17+</span></div>
+      </div>
+      <p class="eyebrow" data-i18n="hero.eyebrow">Your photo library, as a feed</p>
+      <h1 data-i18n="hero.title">Like a private Instagram —
+just for you.</h1>
+      <p class="lead" data-i18n="hero.sub">Inreel turns your own Photos library into a full-screen feed — a local TikTok made from your own photos and videos. Swipe up for a random memory, and clear out the ones you no longer need along the way.</p>
+      <div class="cta">
+        <a class="badge" href="https://testflight.apple.com/join/rZEVmaq2" rel="noopener" data-i18n-aria="hero.tfAria" aria-label="Join the Inreel public beta on TestFlight">
+          <small data-i18n="hero.tfTop">Try the free beta on</small><strong>TestFlight</strong>
+        </a>
+        <!-- APP STORE BADGE PLACEHOLDER (1.0 is in review).
+             When live: replace this <span> with <a class="badge" href="https://apps.apple.com/app/id…">
+             using the official localized "Download on the App Store" badge from Apple Marketing Tools. -->
+        <span class="badge soon" id="appstore-badge" role="img" data-i18n-aria="hero.badgeAria" aria-label="Download on the App Store (coming soon)">
+          <small data-i18n="hero.badgeTop">Download on the</small><strong>App Store</strong><em data-i18n="hero.soon">Coming soon</em>
+        </span>
+        <span class="note" data-i18n="hero.note">Free forever · iOS 17+ · By Yuchen Lin</span>
+        <span class="note" data-i18n="hero.tfNote">The App Store version is in review. Until then, install the free public beta with Apple's TestFlight.</span>
+      </div>
+    </div>
+    <div class="phone" data-shot="1"></div>
+  </div>
+</section>
+
+<div class="strip" aria-hidden="true"></div>
+
+<!-- ================= SELLING POINTS ================= -->
+<section class="chips-sec" style="padding-top:28px">
+  <div class="wrap">
+    <ul class="chips" style="list-style:none;padding:0;margin-bottom:0" aria-label="Highlights" data-i18n-aria="ui.highlights">
+      <li class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7.5 8.5c-2 0-3.5 1.6-3.5 3.5s1.5 3.5 3.5 3.5c3 0 6-7 9-7 2 0 3.5 1.6 3.5 3.5s-1.5 3.5-3.5 3.5c-3 0-6-7-9-7z"/></svg>
+        <b data-i18n="chip.1t">Free forever</b><span data-i18n="chip.1d">No subscriptions, no accounts.</span>
+      </li>
+      <li class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><rect x="9.5" y="10.5" width="5" height="4.5" rx="1"/><path d="M10.5 10.5V9a1.5 1.5 0 0 1 3 0v1.5"/></svg>
+        <b data-i18n="chip.2t">Stays on your phone</b><span data-i18n="chip.2d">Nothing is uploaded. Ever.</span>
+      </li>
+      <li class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M4 4l16 16"/></svg>
+        <b data-i18n="chip.3t">No ads</b><span data-i18n="chip.3d">Nothing between you and your memories.</span>
+      </li>
+      <li class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 3l1.8 4.7L17.5 9.5l-4.7 1.8L11 16l-1.8-4.7L4.5 9.5l4.7-1.8z"/><path d="M4 4l16 16"/></svg>
+        <b data-i18n="chip.4t">No AI</b><span data-i18n="chip.4d">No scanning, no recommendations. Just shuffle.</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section id="how" style="padding-top:8px">
+  <div class="wrap">
+    <p class="kicker">01 — 03</p>
+    <h2 data-i18n="how.title">How it works</h2>
+    <ol class="steps">
+      <li><b data-i18n="how.1t">Allow access</b><span data-i18n="how.1d">Give Inreel access to your Photos. No sign-up, no account.</span></li>
+      <li><b data-i18n="how.2t">Swipe up</b><span data-i18n="how.2d">Each swipe brings a random photo or video, full-screen. Swipe down to go back.</span></li>
+      <li><b data-i18n="how.3t">Keep or toss</b><span data-i18n="how.3d">Heart the ones you love. Swipe left on the ones you don't.</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= EXAMPLES ================= -->
+<section class="alt" id="examples">
+  <div class="wrap">
+    <p class="kicker" data-i18n="ex.kicker">Examples</p>
+    <h2 data-i18n="ex.title">Small moments, one swipe at a time</h2>
+    <p class="sub" data-i18n="ex.sub">Five everyday scenes. Every picture is a real Inreel screenshot, taken with a demo photo library.</p>
+    <ul class="ex-list">
+      <li class="ex">
+        <div class="phone" data-shot="1"></div>
+        <div><p class="num">01</p><h3 data-i18n="ex.1t">The trip you'd almost forgotten</h3><p data-i18n="ex.1d">Waiting in line for coffee, you swipe up — and there's that canal town from a trip you'd half forgotten. When and where it was taken sits quietly in the corner. Tap the heart so it's easy to find again.</p></div>
+      </li>
+      <li class="ex">
+        <div class="phone" data-shot="7"></div>
+        <div><p class="num">02</p><h3 data-i18n="ex.2t">Old screen recordings, gone in a swipe</h3><p data-i18n="ex.2d">A screen recording from who-knows-when, three near-identical blurry shots. Swipe left and they wait in the pending basket. When you're done, look over the basket and confirm once in the iOS dialog — only then are they deleted.</p></div>
+      </li>
+      <li class="ex">
+        <div class="phone" data-shot="4"></div>
+        <div><p class="num">03</p><h3 data-i18n="ex.3t">Keep the keepers</h3><p data-i18n="ex.3d">Tap the heart on the ones that make you smile. They all gather in the Liked tab, ready whenever you want to look back.</p></div>
+      </li>
+      <li class="ex">
+        <div class="phone" data-shot="2"></div>
+        <div><p class="num">04</p><h3 data-i18n="ex.4t">A long video? Press and hold for 2×</h3><p data-i18n="ex.4d">A 20-minute recording of a school concert? Press and hold the middle of the screen to play it at 2×; let go and it's back to normal speed. You can still scrub the progress bar.</p><span class="tag" data-i18n="ex.tag">New in the TestFlight beta</span></div>
+      </li>
+      <li class="ex">
+        <div class="phone" data-shot="9"></div>
+        <div><p class="num">05</p><h3 data-i18n="ex.5t">Muted on the subway</h3><p data-i18n="ex.5d">Mute once and it stays muted — the next video, and the one after that. Press a volume button or unmute when you're ready for sound. It's the same switch you'll find in Settings.</p><span class="tag" data-i18n="ex.tag">New in the TestFlight beta</span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= REDISCOVER ================= -->
+<section id="rediscover">
+  <div class="wrap feature">
+    <div>
+      <p class="kicker">Reel 01</p>
+      <h2 data-i18n="re.title">Rediscover what you forgot you had</h2>
+      <p class="sub" data-i18n="re.sub">Thousands of photos sit untouched in your library. Inreel shuffles them back into view — the trip from three years ago, the video you never rewatched.</p>
+      <ul class="bullets">
+        <li data-i18n="re.b1">Heart your favorites and find them all together in the Liked tab.</li>
+        <li data-i18n="re.b2">See when, where and on which device it was taken — and which album it's in.</li>
+        <li data-i18n="re.b3">Long videos get a progress bar you can scrub.</li>
+        <li data-i18n="re.b4">Share anything with the standard iOS share sheet.</li>
+      </ul>
+    </div>
+    <div class="reel"><div class="strip thin" aria-hidden="true"></div><div class="row">
+      <div class="phone" data-shot="2"></div>
+      <div class="phone" data-shot="3"></div>
+      <div class="phone" data-shot="4"></div>
+    </div><div class="strip thin" aria-hidden="true"></div></div>
+  </div>
+</section>
+
+<!-- ================= CLEAN UP ================= -->
+<section class="alt" id="cleanup">
+  <div class="wrap feature">
+    <div>
+      <p class="kicker">Reel 02</p>
+      <h2 data-i18n="cl.title">Clean up as you go</h2>
+      <p class="sub" data-i18n="cl.sub">Rediscovering old photos is also the best moment to let go of the ones you don't need. Blurry shots, duplicates, screenshots from 2019 — toss them as you scroll.</p>
+      <ul class="bullets">
+        <li data-i18n="cl.b1">Swipe left or tap the trash icon to drop an item into the pending basket.</li>
+        <li data-i18n="cl.b2">Changed your mind? Just undo.</li>
+        <li data-i18n="cl.b3">Nothing is deleted until you confirm once in the iOS system dialog.</li>
+        <li data-i18n="cl.b4">As always on iOS, deleted items go to Recently Deleted first.</li>
+      </ul>
+    </div>
+    <div class="reel"><div class="strip thin" aria-hidden="true"></div><div class="row">
+      <div class="phone" data-shot="5"></div>
+      <div class="phone" data-shot="6"></div>
+      <div class="phone" data-shot="7"></div>
+    </div><div class="strip thin" aria-hidden="true"></div></div>
+  </div>
+</section>
+
+<!-- ================= PRIVACY ================= -->
+<section id="privacy">
+  <div class="wrap">
+    <div class="privacy-card">
+      <div>
+        <h2 data-i18n="pr.title">Your photos never leave your phone</h2>
+        <p class="sub" data-i18n="pr.sub">Inreel has no accounts, no analytics, no ads and no servers to send anything to. The app itself makes no network requests.</p>
+        <ul class="bullets">
+          <li data-i18n="pr.b1">No account or sign-up</li>
+          <li data-i18n="pr.b2">No uploads, no cloud sync of its own</li>
+          <li data-i18n="pr.b3">No analytics or tracking</li>
+          <li data-i18n="pr.b4">No AI analysis of your photos</li>
+        </ul>
+        <p class="fine" data-i18n="pr.note">If some originals are stored in iCloud, iOS may download them so they can be played — that's handled by the system, not Inreel.</p>
+        <a class="btn" href="https://inreel-privacy.vercel.app/" rel="noopener" data-i18n="pr.link">Read the privacy policy</a>
+      </div>
+      <div class="phone" data-shot="8"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OPEN SOURCE ================= -->
+<section class="alt" id="open-source">
+  <div class="wrap">
+    <div class="os-card">
+      <div>
+        <p class="kicker" data-i18n="os.kicker">Open source</p>
+        <span class="lic">GPL-3.0</span>
+        <h2 data-i18n="os.title">Open source, line by line</h2>
+        <p class="sub" data-i18n="os.sub">Inreel's code is public on GitHub under the GPL-3.0 license. “Your photos never leave your phone” isn't just a promise — anyone can read the code and check.</p>
+        <ul class="bullets" style="margin-bottom:24px">
+          <li data-i18n="os.b1">Licensed under GPL-3.0</li>
+          <li data-i18n="os.b2">Build it yourself in Xcode — the steps are in the README</li>
+          <li data-i18n="os.b3">The Inreel name and icon aren't covered by the license; forks need their own name</li>
+        </ul>
+        <a class="btn" href="https://github.com/yuchenlin/inreel-ios" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span data-i18n="os.link">View the source on GitHub</span></a>
+      </div>
+      <div class="term" aria-label="Terminal"><b>$</b> git clone https://github.com/yuchenlin/inreel-ios
+<b>$</b> cd inreel-ios
+<b>$</b> xcodegen generate
+<b>$</b> open Inreel.xcodeproj</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <h2 data-i18n="faq.title">FAQ</h2>
+    <details><summary data-i18n="faq.q1">Is Inreel really free?</summary><p data-i18n="faq.a1">Yes. No subscriptions, no ads, no account. It's free, and it'll stay that way.</p></details>
+    <details><summary data-i18n="faq.q2">Do my photos get uploaded anywhere?</summary><p data-i18n="faq.a2">No. Inreel doesn't upload anything, and the app itself makes no network requests. If an original lives in iCloud, iOS may download it to your phone so it can be shown.</p></details>
+    <details><summary data-i18n="faq.q3">Can I delete photos by accident?</summary><p data-i18n="faq.a3">No. Swiping left only moves an item into the pending basket, and you can undo it. Photos are deleted only after you confirm in the iOS system dialog.</p></details>
+    <details><summary data-i18n="faq.q4">Does it use AI or decide what I see?</summary><p data-i18n="faq.a4">No. There's no AI and no recommendation algorithm. Inreel simply shows your photos and videos in random order.</p></details>
+    <details><summary data-i18n="faq.q5">What do I need to use it?</summary><p data-i18n="faq.a5">A device running iOS 17 or later, and permission for Inreel to access your Photos.</p></details>
+    <details><summary data-i18n="faq.q6">How can I get Inreel right now?</summary><p data-i18n="faq.a6">The App Store version is in review. Until it's out, open the TestFlight link on your iPhone to install the free public beta.</p><p><a href="https://testflight.apple.com/join/rZEVmaq2" rel="noopener">testflight.apple.com/join/rZEVmaq2</a></p></details>
+    <details><summary data-i18n="faq.q7">Is Inreel open source?</summary><p data-i18n="faq.a7">Yes. The code is on GitHub under the GPL-3.0 license.</p><p><a href="https://github.com/yuchenlin/inreel-ios" rel="noopener">github.com/yuchenlin/inreel-ios</a></p></details>
+  </div>
+</section>
+</main>
+
+<div class="strip" aria-hidden="true"></div>
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/favicon-64.png" alt="" width="32" height="32">Inreel</a>
+    <nav class="links" aria-label="Footer">
+      <a href="https://inreel-privacy.vercel.app/support.html" rel="noopener" data-i18n="ft.support">Support</a>
+      <a href="https://inreel-privacy.vercel.app/" rel="noopener" data-i18n="ft.privacy">Privacy policy</a>
+      <a href="https://github.com/yuchenlin/inreel-ios" rel="noopener" data-i18n="ft.source">Source code (GitHub)</a>
+      <a href="https://testflight.apple.com/join/rZEVmaq2" rel="noopener">TestFlight</a>
+      <a href="mailto:yuchenlin0212@163.com"><span data-i18n="ft.contact">Contact</span>: yuchenlin0212@163.com</a>
+    </nav>
+    <p>© 2026 Yuchen Lin</p>
+    <p class="tm" data-i18n="ft.tm">Instagram and TikTok are trademarks of their respective owners. Inreel is not affiliated with, endorsed by, or sponsored by them.</p>
+  </div>
+</footer>
+
+<script src="assets/i18n.js"></script>
+<script>
+(function(){
+  "use strict";
+  var D = window.INREEL_I18N || {};
+  var SUPPORTED = ["en","zh-Hans","zh-Hant","ja","ko","es","fr","de","pt-BR"];
+  var KEY = "inreel-lang";
+
+  /* ---- screenshot slots: phone frame + graceful placeholder ---- */
+  var slots = document.querySelectorAll(".phone[data-shot]");
+  slots.forEach(function(p){
+    var n = p.getAttribute("data-shot");
+    var file = "shot-" + n + ".jpg";
+    p.innerHTML =
+      '<div class="screen">' +
+        '<div class="ph" aria-hidden="true"><span class="n">' + file + '</span>' +
+        '<span class="t" data-i18n="shot.' + n + '"></span>' +
+        '<span class="s" data-i18n="ui.soon"></span></div>' +
+        '<img src="assets/' + file + '" alt="" data-i18n-alt="shot.' + n + '" loading="' + (n === "1" ? "eager" : "lazy") + '" decoding="async">' +
+      '</div>';
+    var img = p.querySelector("img");
+    img.addEventListener("error", function(){ img.remove(); }, {once:true});
+  });
+
+  function pick(){
+    try{
+      var q = new URLSearchParams(location.search).get("lang");
+      if (q && SUPPORTED.indexOf(q) > -1) return q;
+      var s = localStorage.getItem(KEY);
+      if (s && SUPPORTED.indexOf(s) > -1) return s;
+    }catch(e){}
+    var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || "en"];
+    for (var i = 0; i < list.length; i++){
+      var l = String(list[i]).toLowerCase();
+      if (l.indexOf("zh") === 0){
+        return /hant|-tw|-hk|-mo/.test(l) ? "zh-Hant" : "zh-Hans";
+      }
+      var base = l.split("-")[0];
+      if (base === "pt") return "pt-BR";
+      for (var j = 0; j < SUPPORTED.length; j++){
+        if (SUPPORTED[j].toLowerCase() === base) return SUPPORTED[j];
+      }
+    }
+    return "en";
+  }
+
+  function apply(lang){
+    var t = D[lang] || D.en; if (!t) return;
+    var en = D.en || {};
+    function g(k){ return (t[k] != null ? t[k] : en[k]) || ""; }
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var v = g(el.getAttribute("data-i18n")); if (v) el.textContent = v;
+    });
+    document.querySelectorAll("[data-i18n-alt]").forEach(function(el){
+      el.setAttribute("alt", g(el.getAttribute("data-i18n-alt")));
+    });
+    document.querySelectorAll("[data-i18n-aria]").forEach(function(el){
+      el.setAttribute("aria-label", g(el.getAttribute("data-i18n-aria")));
+    });
+    document.title = g("meta.title");
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute("content", g("meta.desc"));
+    var sel = document.getElementById("lang-select");
+    sel.value = lang; sel.setAttribute("aria-label", g("ui.language"));
+  }
+
+  var current = pick();
+  apply(current);
+  document.getElementById("lang-select").addEventListener("change", function(e){
+    var v = e.target.value;
+    try{ localStorage.setItem(KEY, v); }catch(err){}
+    apply(v);
+  });
+})();
+</script>
+</body>
+</html>

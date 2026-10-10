@@ -2,6 +2,8 @@
 
 **Your photo library, as a private, offline reel.**
 
+Website: https://inreel-ios.vercel.app (also at https://yuchenlin.xyz/inreel/)
+
 Inreel turns the Photos library on your iPhone into a full-screen, random, short-video-style
 feed. Swipe up through old photos, Live Photos, videos, and screenshots you forgot you had;
 keep the ones you love, jot a note on a memory, and set aside the ones you don't need so you
